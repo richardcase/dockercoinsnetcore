@@ -22,7 +22,7 @@ namespace Worker
 
         public async void Start(CancellationToken token)
         {
-            redisConnection = await OpenConnection(Options.CacheAddress);
+            redisConnection = await OpenConnection(Options.CacheAddress, Options.CachePassword);
 
             var tasks = new ConcurrentBag<Task>();
             Task minerTask = Task.Factory.StartNew(() => Mine(token), token);
@@ -41,17 +41,24 @@ namespace Worker
             {
                 sw.SpinOnce();
                 //NOTE: could add a sleep of 100ms if needed
-                string randomStr = GetRandomStringAsync(Options.RngAddress).Result;
-                string hashed = HashStringAsync(Options.HasherAddress, randomStr).Result;
-
-                if (hashed.StartsWith("0"))
+                try
                 {
-                    Log.Debug("Coin found {coinid", randomStr);
-                    IDatabase db = redisConnection.GetDatabase();
-                    db.HashSet("wallet", randomStr, hashed);
-                }
+                    string randomStr = GetRandomStringAsync(Options.RngAddress).Result;
+                    string hashed = HashStringAsync(Options.HasherAddress, randomStr).Result;
 
-                Interlocked.Increment(ref workDone);
+                    if (hashed.StartsWith("0"))
+                    {
+                        Log.Debug("Coin found {coinid", randomStr);
+                        IDatabase db = redisConnection.GetDatabase();
+                        db.HashSet("wallet", randomStr, hashed);
+                    }
+
+                    Interlocked.Increment(ref workDone);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Issue occred with the miner");
+                }
             }
         }
 
@@ -61,14 +68,21 @@ namespace Worker
             {
                 Thread.Sleep(1000);
 
-                IDatabase db = redisConnection.GetDatabase();
-                db.StringIncrement("hashes", workDone);
+                try
+                {
+                    IDatabase db = redisConnection.GetDatabase();
+                    db.StringIncrement("hashes", workDone);
 
-                Interlocked.Exchange(ref workDone, 0);
+                    Interlocked.Exchange(ref workDone, 0);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Issue occred reporting usage");
+                }
             }
         }
 
-        private async Task<ConnectionMultiplexer> OpenConnection (string cacheAddress)
+        private async Task<ConnectionMultiplexer> OpenConnection (string cacheAddress, string cachePassword)
         {
             ConfigurationOptions redisConfig = new ConfigurationOptions
             {
@@ -76,7 +90,8 @@ namespace Worker
                 {
                     { cacheAddress }
                 },
-                AbortOnConnectFail = false
+                AbortOnConnectFail = false,
+                Password = cachePassword
             };
 
             return await ConnectionMultiplexer.ConnectAsync(redisConfig);  

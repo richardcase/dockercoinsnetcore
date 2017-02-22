@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Hasher.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hasher.Controllers
@@ -6,16 +6,18 @@ namespace Hasher.Controllers
     [Route("api/hasher")]
     public class HasherController : Controller
     {
+        private readonly IHasher hasher;
+
+        public HasherController(IHasher hasherToUse)
+        {
+            hasher = hasherToUse;
+        }
  
         // POST api/values
         [HttpPost]
         public string Post([FromBody]string valueToHash)
         {
-            byte[] bytes = System.Text.Encoding.UTF8.GetBytes(valueToHash);
-            var hashAlgoritm = System.Security.Cryptography.MD5.Create();
-            bytes = hashAlgoritm.ComputeHash(bytes);
-
-            return Convert.ToBase64String(bytes);
+            return hasher.HashString(valueToHash);
         }
     }
 }
