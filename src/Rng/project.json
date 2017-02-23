@@ -1,8 +1,7 @@
 {
   "dependencies": {
     "Microsoft.NETCore.App": {
-      "version": "1.1.0",
-      "type": "platform"
+      "version": "1.1.0"
     },
     "Microsoft.AspNetCore.Mvc": "1.1.1",
     "Microsoft.Extensions.Configuration.FileExtensions": "1.1.0",
@@ -17,7 +16,7 @@
   },
 
   "frameworks": {
-    "netcoreapp1.1": { }
+    "netcoreapp1.1": {}
   },
 
   "buildOptions": {
@@ -29,5 +28,14 @@
     "configProperties": {
       "System.GC.Server": true
     }
+  },
+
+  "runtimes": {
+    "win7-x64": {},
+    "win8-x64": {},
+    "win81-x64": {},
+    "win10-x64": {},
+    "ubuntu.14.04-x64": {},
+    "ubuntu.16.04-x64": {}
   }
 }

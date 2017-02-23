@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using Serilog;
@@ -20,9 +21,9 @@ namespace Worker
             Options = options;
         }
 
-        public async void Start(CancellationToken token)
+        public void Start(CancellationToken token)
         {
-            redisConnection = await OpenConnection(Options.CacheAddress, Options.CachePassword);
+            redisConnection = OpenConnection(Options.CacheAddress, Options.CachePassword);
 
             var tasks = new ConcurrentBag<Task>();
             Task minerTask = Task.Factory.StartNew(() => Mine(token), token);
@@ -37,6 +38,7 @@ namespace Worker
         private void Mine(CancellationToken token)
         {
             var sw = new SpinWait();
+            Thread.Sleep(100);
             while (!token.IsCancellationRequested)
             {
                 sw.SpinOnce();
@@ -48,7 +50,7 @@ namespace Worker
 
                     if (hashed.StartsWith("0"))
                     {
-                        Log.Debug("Coin found {coinid", randomStr);
+                        Log.Information("Coin found {coinid}", hashed);
                         IDatabase db = redisConnection.GetDatabase();
                         db.HashSet("wallet", randomStr, hashed);
                     }
@@ -72,6 +74,7 @@ namespace Worker
                 {
                     IDatabase db = redisConnection.GetDatabase();
                     db.StringIncrement("hashes", workDone);
+                    Log.Information("Mining iterations done {iterations}", workDone);
 
                     Interlocked.Exchange(ref workDone, 0);
                 }
@@ -82,7 +85,7 @@ namespace Worker
             }
         }
 
-        private async Task<ConnectionMultiplexer> OpenConnection (string cacheAddress, string cachePassword)
+        private  ConnectionMultiplexer OpenConnection (string cacheAddress, string cachePassword)
         {
             ConfigurationOptions redisConfig = new ConfigurationOptions
             {
@@ -91,10 +94,11 @@ namespace Worker
                     { cacheAddress }
                 },
                 AbortOnConnectFail = false,
-                Password = cachePassword
+                Password = cachePassword,
+                Ssl = true
             };
 
-            return await ConnectionMultiplexer.ConnectAsync(redisConfig);  
+            return ConnectionMultiplexer.Connect(redisConfig);  
         }
 
         private async Task<string> GetRandomStringAsync(string rngAddr)
@@ -139,6 +143,7 @@ namespace Worker
                     using (StringContent content = new StringContent(toHash))
                     {
                         request.Content = content;
+                        request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
                         var response = await client.SendAsync(request);
                         if (response.IsSuccessStatusCode)

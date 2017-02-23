@@ -15,6 +15,7 @@ namespace Hasher
             var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseUrls("http://*:5001")
                 .UseStartup<Startup>()
                 .Build();
 
