@@ -36,3 +36,12 @@ textarea {
     display: none
   }
 }
+
+#graph {
+    background-color: #eee;
+    width: 800px;
+    height: 400px;
+}
+#tweet {
+    color: royalblue;
+}

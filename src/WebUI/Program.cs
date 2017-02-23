@@ -15,6 +15,7 @@ namespace WebUI
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseStartup<Startup>()
+                .UseUrls("http://*:8888")
                 .Build();
 
             host.Run();
