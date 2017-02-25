@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
+using Serilog;
 
 namespace WebUI
 {
@@ -21,6 +22,11 @@ namespace WebUI
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
+
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Console()
+                .CreateLogger();
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -30,13 +36,23 @@ namespace WebUI
         {
             // Add framework services.
             services.AddMvc().AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
-        }
+
+            services.Configure<CacheSettings>(settings =>
+            {
+                settings.CacheAddress = Environment.GetEnvironmentVariable("DOCKERCOINS_CACHE_ADDR");
+                settings.CachePassword = Environment.GetEnvironmentVariable("DOCKERCOINS_CACHE_PWD");
+            });
+
+       }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
+            //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            //loggerFactory.AddDebug();
+            loggerFactory.AddSerilog();
+
+            appLifetime.ApplicationStopped.Register(Log.CloseAndFlush);
 
             if (env.IsDevelopment())
             {

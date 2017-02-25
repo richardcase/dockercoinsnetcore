@@ -1,4 +1,4 @@
-﻿{
+{
   "dependencies": {
     "Microsoft.NETCore.App": {
       "version": "1.1.0"
@@ -19,7 +19,11 @@
     "Microsoft.Extensions.Logging.Console": "1.1.0",
     "Microsoft.Extensions.Logging.Debug": "1.1.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
-    "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.1.0"
+    "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.1.0",
+    "StackExchange.Redis": "1.2.0",
+    "Serilog": "2.4.0",
+    "Serilog.Extensions.Logging": "1.4.0",
+    "Serilog.Sinks.Console": "2.1.0"
   },
 
   "tools": {
