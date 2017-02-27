@@ -34,8 +34,7 @@ String.prototype.format = function () {
 var series = [];
 var points = []
 var graph = null;
-
-function refresh () {
+function refresh() {
     $.ajax({ url: "api/coins" }).done(function (data) {
         series.push(data);
         while (series.length < 250) {
@@ -50,11 +49,11 @@ function refresh () {
             points.pop();
         }
         var speed;
-        for (var i=0; i<series.length-1; i++) {
+        for (var i = 0; i < series.length - 1; i++) {
             // Compute instantaneous speed
             var s1 = series[i];
-            var s2 = series[i+1];
-            speed = (s2.hashes-s1.hashes)/(s2.now-s1.now);
+            var s2 = series[i + 1];
+            speed = (s2.hashes - s1.hashes) / (s2.now - s1.now);
             points.push({ x: s2.now, y: speed });
         }
         $("#speed").text("~" + speed.toFixed(1) + " hashes/second");
@@ -67,9 +66,10 @@ function refresh () {
                 element: $("#graph")[0],
                 preserve: true,
                 series: [
-                    { name: "Coins",
-                      color: "steelblue",
-                      data: points
+                    {
+                        name: "Coins",
+                        color: "steelblue",
+                        data: points
                     }
                 ]
             });

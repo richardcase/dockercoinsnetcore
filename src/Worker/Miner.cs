@@ -38,11 +38,12 @@ namespace Worker
         private void Mine(CancellationToken token)
         {
             var sw = new SpinWait();
-            Thread.Sleep(100);
+           
             while (!token.IsCancellationRequested)
             {
                 sw.SpinOnce();
                 //NOTE: could add a sleep of 100ms if needed
+                Thread.Sleep(100);
                 try
                 {
                     string randomStr = GetRandomStringAsync(Options.RngAddress).Result;

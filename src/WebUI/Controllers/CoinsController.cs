@@ -26,6 +26,7 @@ namespace WebUI.Controllers
         }
 
         [HttpGet]
+        [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Get()
         {
             try
@@ -40,14 +41,14 @@ namespace WebUI.Controllers
                 {
                     Coins = string.Empty,
                     Hashes = Convert.ToInt32(hashes),
-                    Now = offset.ToUnixTimeMilliseconds()
+                    Now = offset.ToUnixTimeSeconds()
                 };
 
                 return Json(summary);
             }
             catch (Exception ex)
             {
-                logger.LogError("Error getting coins summary", ex.Message);
+                logger.LogError("Error getting coins summary", ex.ToString());
                 return StatusCode(500);
             }
             
