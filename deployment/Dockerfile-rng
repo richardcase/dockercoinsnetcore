@@ -5,7 +5,7 @@ ADD build/rng /
 
 EXPOSE 5000
 
-ENTRYPOINT["/Rng"]
+ENTRYPOINT ["/Rng"]
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE

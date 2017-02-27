@@ -8,6 +8,8 @@ node_js:
 
 install:
   - npm install -g bower
+
+script:
   - dotnet restore src/Rng/
   - dotnet publish src/Rng/ -r ubuntu.14.04-x64 -o deployment/build/rng -c Release
   - dotnet restore src/Hasher/
@@ -16,28 +18,22 @@ install:
   - dotnet publish src/Worker/ -r ubuntu.14.04-x64 -o deployment/build/worker -c Release
   - dotnet restore src/WebUI/
   - dotnet publish src/WebUI/ -r ubuntu.14.04-x64 -o deployment/build/webui -c Release
-
-script:
-  - echo "No tests"
-
-after_success:
-    - export REPO_HASH=richardcase/dockercoinsnetcore-hasher
-    - export REPO_RNG=richardcase/dockercoinsnetcore-rng
-    - export REPO_WEB=richardcase/dockercoinsnetcore-webui
-    - export REPO_WORK=richardcase/dockercoinsnetcore-worker
-    - export VERSION=`cat ./VERSION`
-    - export BUILDDATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"`
-    - echo $VERSION
-    - echo $BUILDDATE
-    - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
-    - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-    - cd deployment/
-    - ls build/rng
-    - docker build -f  Dockerfile-rng -t $REPO_RNG:$COMMIT --build-arg BUILD_DATE=$BUILDDATE --build-arg VCS_REF=$COMMIT --build-arg VERSION=$VERSION .
-    - docker tag $REPO_RNG:$COMMIT $REPO_RNG:$TAG
-    - docker tag $REPO_RNG:$COMMIT $REPO_RNG:travis-$TRAVIS_BUILD_NUMBER
-    - docker tag $REPO_RNG:$COMMIT $REPO_RNG:$VERSION
-    - docker push $REPO_RNG
+  - export REPO_HASH=richardcase/dockercoinsnetcore-hasher
+  - export REPO_RNG=richardcase/dockercoinsnetcore-rng
+  - export REPO_WEB=richardcase/dockercoinsnetcore-webui
+  - export REPO_WORK=richardcase/dockercoinsnetcore-worker
+  - export VERSION=`cat ./VERSION`
+  - export BUILDDATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"`
+  - echo $VERSION
+  - echo $BUILDDATE
+  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
+  - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+  - cd deployment/
+  - docker build -f  Dockerfile-rng -t $REPO_RNG:$COMMIT --build-arg BUILD_DATE=$BUILDDATE --build-arg VCS_REF=$COMMIT --build-arg VERSION=$VERSION .
+  - docker tag $REPO_RNG:$COMMIT $REPO_RNG:$TAG
+  - docker tag $REPO_RNG:$COMMIT $REPO_RNG:travis-$TRAVIS_BUILD_NUMBER
+  - docker tag $REPO_RNG:$COMMIT $REPO_RNG:$VERSION
+  - docker push $REPO_RNG
 
 env:
     global:
