@@ -21,6 +21,7 @@ script:
   - echo "No tests"
 
 after_success:
+    - ls deployment/build/rng
     - export REPO_HASH=richardcase/dockercoinsnetcore-hasher
     - export REPO_RNG=richardcase/dockercoinsnetcore-rng
     - export REPO_WEB=richardcase/dockercoinsnetcore-webui
