@@ -1,0 +1,40 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: worker
+  labels:
+    app: worker
+    tier: backend
+spec:
+  replicas: 1
+  # Update pods with rolling update
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: worker
+        tier: backend
+    spec:
+      containers:
+      - name: worker
+        image: richardcase/dockercoinsnetcore-worker:1.0.0
+        command: ["/Worker"]
+        env:
+        - name: DOCKERCOINS_CACHE_ADDR
+          valueFrom:
+            configMapKeyRef:
+              name: cache-config
+              key: redis.url
+        - name: DOCKERCOINS_CACHE_PWD
+          valueFrom:
+            secretKeyRef:
+              name: cache-secrets
+              key: password
+        - name: DOCKERCOINS_HASHER_ADDR
+          value: http://hasher:5001/api/hasher
+        - name: DOCKERCOINS_RNG_ADDR
+          value: http://localhost:5000/api/rng/32

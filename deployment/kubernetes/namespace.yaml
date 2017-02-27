@@ -1,0 +1,8 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: dockercoins-dev
+  labels:
+    name: dockercoins-dev
+    app: dockercoins
+    env: development
