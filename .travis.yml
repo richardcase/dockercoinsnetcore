@@ -3,8 +3,11 @@ dist: trusty
 sudo: required
 mono: none
 dotnet: 1.0.0-preview2-1-003177
+node_js:
+ - "6.10"
 
 install:
+  - npm install -g bower
   - dotnet restore src/Rng/
   - dotnet publish src/Rng/ -r ubuntu.14.04-x64 -o deployment/build/rng -c Release
   - dotnet restore src/Hasher/
