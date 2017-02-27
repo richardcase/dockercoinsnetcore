@@ -2,7 +2,7 @@ language: csharp
 dist: trusty
 sudo: required
 mono: none
-dotnet: 1.0.0-preview2-003177
+dotnet: 1.0.0-preview2-1-003177
 script:
   - dotnet restore src/Rng/
   - dotnet publish src/Rng/ -r ubuntu.14.04-x64 -o ./artifacts/rng -c Release
