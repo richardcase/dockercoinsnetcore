@@ -27,7 +27,7 @@ script:
   - echo $VERSION
   - echo $BUILDDATE
   - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
-  - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
   - cd deployment/
   - docker build -f  Dockerfile-rng -t $REPO_RNG:$COMMIT --build-arg BUILD_DATE=$BUILDDATE --build-arg VCS_REF=$COMMIT --build-arg VERSION=$VERSION .
   - docker tag $REPO_RNG:$COMMIT $REPO_RNG:$TAG
