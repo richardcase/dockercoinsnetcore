@@ -19,7 +19,7 @@ script:
 
 after_success:
     - export REPO_HASH=richardcase/dockercoinsnetcore-hasher
-    - export REPO_RNG=richardcase/dockercoinsnetcor-rng
+    - export REPO_RNG=richardcase/dockercoinsnetcore-rng
     - export REPO_WEB=richardcase/dockercoinsnetcore-webui
     - export REPO_WORK=richardcase/dockercoinsnetcore-worker
     - export VERSION=`cat ./VERSION`
