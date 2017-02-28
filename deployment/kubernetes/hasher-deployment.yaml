@@ -23,7 +23,6 @@ spec:
       - name: rng
         image: richardcase/dockercoinsnetcore-hasher:1.0.0
         imagePullPolicy: Always
-        command: ["/Hasher"]
         # ReadinessProbe: indicates whether the container is ready to service requests.
         # If the ReadinessProbe fails, the endpoints controller will remove the
         # pod’s IP address from the endpoints of all services that match the pod.

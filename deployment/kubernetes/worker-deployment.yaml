@@ -23,7 +23,6 @@ spec:
       - name: worker
         image: richardcase/dockercoinsnetcore-worker:1.0.0
         imagePullPolicy: Always
-        command: ["/Worker"]
         env:
         - name: DOCKERCOINS_CACHE_ADDR
           valueFrom:
