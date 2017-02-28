@@ -1,7 +1,8 @@
 {
   "dependencies": {
     "Microsoft.NETCore.App": {
-      "version": "1.1.0"
+      "version": "1.1.0",
+      "type": "platform"
     },
     "Microsoft.AspNetCore.Razor.Tools": {
       "version": "1.0.0-preview2-final",
@@ -43,17 +44,6 @@
     "configProperties": {
       "System.GC.Server": true
     }
-  },
-
-  "runtimes": {
-    "win7-x64": {},
-    "win8-x64": {},
-    "win81-x64": {},
-    "win10-x64": {},
-    "ubuntu.14.04-x64": {},
-    "ubuntu.16.04-x64": {},
-    "debian.8-x84": {},
-    "centos.7-x64": {}
   },
 
   "publishOptions": {

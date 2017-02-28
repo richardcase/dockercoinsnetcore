@@ -1,11 +1,12 @@
 FROM microsoft/dotnet:1.1.0-runtime
 
 # Add the published artifacts
-ADD build/webui /
+ADD build/webui /app
+WORKDIR /app
 
 EXPOSE 8888
 
-ENTRYPOINT ["/Webui"]
+ENTRYPOINT ["dotnet", "Webui.dll"]
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE

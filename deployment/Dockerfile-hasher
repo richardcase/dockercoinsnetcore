@@ -1,11 +1,12 @@
 FROM microsoft/dotnet:1.1.0-runtime
 
 # Add the published artifacts
-ADD build/hasher /
+ADD build/hasher /app
+WORKDIR /app
 
 EXPOSE 5001
 
-ENTRYPOINT ["/Hasher"]
+ENTRYPOINT ["dotnet", "Hasher.dll"]
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
