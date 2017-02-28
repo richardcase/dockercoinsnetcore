@@ -5,13 +5,14 @@ mono: none
 dotnet: 1.0.0-preview2-1-003177
 node_js:
  - "6.10"
+services:
+  - docker
 
 install:
   - npm install -g bower
 
 script:
-  - dotnet restore src/Rng/
-  - dotnet publish src/Rng/ -r ubuntu.14.04-x64 -o deployment/build/rng -c Release
+  - docker run -it --rm -v $(pwd):/sln --workdir /sln microsoft/dotnet:1.1.0-sdk-projectjson sh ./build-rng.sh
   - dotnet restore src/Hasher/
   - dotnet publish src/Hasher/ -r ubuntu.14.04-x64 -o deployment/build/hasher -c Release
   - dotnet restore src/Worker/
