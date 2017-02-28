@@ -12,10 +12,18 @@ install:
   - npm install -g bower
 
 script:
-  - docker run -it --rm -v $(pwd):/sln --workdir /sln microsoft/dotnet:1.1.0-sdk-projectjson sh ./build-rng.sh
-  - docker run -it --rm -v $(pwd):/sln --workdir /sln microsoft/dotnet:1.1.0-sdk-projectjson sh ./build-hasher.sh
-  - docker run -it --rm -v $(pwd):/sln --workdir /sln microsoft/dotnet:1.1.0-sdk-projectjson sh ./build-worker.sh
-  - docker run -it --rm -v $(pwd):/sln --workdir /sln microsoft/dotnet:1.1.0-sdk-projectjson sh ./build-webui.sh
+  #- docker run -it --rm -v $(pwd):/sln --workdir /sln microsoft/dotnet:1.1.0-sdk-projectjson sh ./build-rng.sh
+  #- docker run -it --rm -v $(pwd):/sln --workdir /sln microsoft/dotnet:1.1.0-sdk-projectjson sh ./build-hasher.sh
+  #- docker run -it --rm -v $(pwd):/sln --workdir /sln microsoft/dotnet:1.1.0-sdk-projectjson sh ./build-worker.sh
+  #- docker run -it --rm -v $(pwd):/sln --workdir /sln microsoft/dotnet:1.1.0-sdk-projectjson sh ./build-webui.sh
+  - dotnet restore src/Rng/
+  - dotnet publish src/Rng/ -o deployment/build/rng -c Release
+  - dotnet restore src/Hasher/
+  - dotnet publish src/Hasher/ -o deployment/build/hasher -c Release
+  - dotnet restore src/Worker/
+  - dotnet publish src/Worker/ -o deployment/build/worker -c Release
+  - dotnet restore src/WebUI/
+  - dotnet publish src/WebUI/ -o deployment/build/webui -c Release
   - export REPO_HASH=richardcase/dockercoinsnetcore-hasher
   - export REPO_RNG=richardcase/dockercoinsnetcore-rng
   - export REPO_WEB=richardcase/dockercoinsnetcore-webui
