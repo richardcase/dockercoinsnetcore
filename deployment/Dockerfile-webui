@@ -6,7 +6,7 @@ WORKDIR /app
 
 EXPOSE 8888
 
-ENTRYPOINT ["dotnet", "Webui.dll"]
+ENTRYPOINT ["dotnet", "WebUI.dll"]
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
