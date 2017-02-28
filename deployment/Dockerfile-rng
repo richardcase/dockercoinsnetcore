@@ -1,4 +1,4 @@
-FROM scratch
+FROM microsoft/dotnet:1.1.0-runtime-deps
 
 # Add the published artifacts
 ADD build/rng /
