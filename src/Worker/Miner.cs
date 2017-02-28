@@ -104,6 +104,7 @@ namespace Worker
                 Password = cachePassword,
                 Ssl = true
             };
+            redisConfig.CertificateValidation += (sender, cert, chain, errors) => true;
 
             return ConnectionMultiplexer.Connect(redisConfig);  
         }
