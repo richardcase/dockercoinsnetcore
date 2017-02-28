@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: cache-config
 data:
-  redis.url: rmc-dockercoins.redis.cache.windows.net:6379
+  redis.url: rmc-dockercoins.redis.cache.windows.net:6380

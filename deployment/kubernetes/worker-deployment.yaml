@@ -37,4 +37,4 @@ spec:
         - name: DOCKERCOINS_HASHER_ADDR
           value: http://hasher:5001/api/hasher
         - name: DOCKERCOINS_RNG_ADDR
-          value: http://localhost:5000/api/rng/32
+          value: http://rng:5000/api/rng/32

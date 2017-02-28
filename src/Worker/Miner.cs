@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Sockets;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Serilog;
 using StackExchange.Redis;
+using System.Linq;
 
 namespace Worker
 {
@@ -88,11 +92,13 @@ namespace Worker
 
         private  ConnectionMultiplexer OpenConnection (string cacheAddress, string cachePassword)
         {
+            string redisIp = GetIPFromHostName(cacheAddress);
+
             ConfigurationOptions redisConfig = new ConfigurationOptions
             {
                 EndPoints =
                 {
-                    { cacheAddress }
+                    { redisIp }
                 },
                 AbortOnConnectFail = false,
                 Password = cachePassword,
@@ -101,6 +107,28 @@ namespace Worker
 
             return ConnectionMultiplexer.Connect(redisConfig);  
         }
+
+        private string GetIPFromHostName(string hostName)
+        {
+
+            string[] s = hostName.Split(':');
+            string host = s[0]; 
+            int port = Convert.ToInt32(s[1]);
+
+            if (IsIpAddress(host))
+            {
+                return hostName;
+            }
+
+            var ip = Dns.GetHostEntryAsync(host).GetAwaiter().GetResult();
+            return $"{ip.AddressList.First(x => IsIpAddress(x.ToString()))}:{port}";
+        }
+
+        private static bool IsIpAddress(string host)
+        {
+            return Regex.IsMatch(host, @"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b");
+        }
+
 
         private async Task<string> GetRandomStringAsync(string rngAddr)
         {
