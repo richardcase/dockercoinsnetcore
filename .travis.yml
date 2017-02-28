@@ -13,12 +13,12 @@ install:
 
 script:
   - docker run -it --rm -v $(pwd):/sln --workdir /sln microsoft/dotnet:1.1.0-sdk-projectjson sh ./build-rng.sh
-  - dotnet restore src/Hasher/
-  - dotnet publish src/Hasher/ -r ubuntu.14.04-x64 -o deployment/build/hasher -c Release
-  - dotnet restore src/Worker/
-  - dotnet publish src/Worker/ -r ubuntu.14.04-x64 -o deployment/build/worker -c Release
-  - dotnet restore src/WebUI/
-  - dotnet publish src/WebUI/ -r ubuntu.14.04-x64 -o deployment/build/webui -c Release
+ # - dotnet restore src/Hasher/
+ # - dotnet publish src/Hasher/ -r ubuntu.14.04-x64 -o deployment/build/hasher -c Release
+ # - dotnet restore src/Worker/
+ # - dotnet publish src/Worker/ -r ubuntu.14.04-x64 -o deployment/build/worker -c Release
+ # - dotnet restore src/WebUI/
+ # - dotnet publish src/WebUI/ -r ubuntu.14.04-x64 -o deployment/build/webui -c Release
   - export REPO_HASH=richardcase/dockercoinsnetcore-hasher
   - export REPO_RNG=richardcase/dockercoinsnetcore-rng
   - export REPO_WEB=richardcase/dockercoinsnetcore-webui
@@ -35,21 +35,21 @@ script:
   - docker tag $REPO_RNG:$COMMIT $REPO_RNG:travis-$TRAVIS_BUILD_NUMBER
   - docker tag $REPO_RNG:$COMMIT $REPO_RNG:$VERSION
   - docker push $REPO_RNG
-  - docker build -f  Dockerfile-hasher -t $REPO_HASH:$COMMIT --build-arg BUILD_DATE=$BUILDDATE --build-arg VCS_REF=$COMMIT --build-arg VERSION=$VERSION .
-  - docker tag $REPO_HASH:$COMMIT $REPO_HASH:$TAG
-  - docker tag $REPO_HASH:$COMMIT $REPO_HASH:travis-$TRAVIS_BUILD_NUMBER
-  - docker tag $REPO_HASH:$COMMIT $REPO_HASH:$VERSION
-  - docker push $REPO_HASH
-  - docker build -f  Dockerfile-worker -t $REPO_WORK:$COMMIT --build-arg BUILD_DATE=$BUILDDATE --build-arg VCS_REF=$COMMIT --build-arg VERSION=$VERSION .
-  - docker tag $REPO_WORK:$COMMIT $REPO_WORK:$TAG
-  - docker tag $REPO_WORK:$COMMIT $REPO_WORK:travis-$TRAVIS_BUILD_NUMBER
-  - docker tag $REPO_WORK:$COMMIT $REPO_WORK:$VERSION
-  - docker push $REPO_WORK
-  - docker build -f  Dockerfile-webui -t $REPO_WEB:$COMMIT --build-arg BUILD_DATE=$BUILDDATE --build-arg VCS_REF=$COMMIT --build-arg VERSION=$VERSION .
-  - docker tag $REPO_WEB:$COMMIT $REPO_WEB:$TAG
-  - docker tag $REPO_WEB:$COMMIT $REPO_WEB:travis-$TRAVIS_BUILD_NUMBER
-  - docker tag $REPO_WEB:$COMMIT $REPO_WEB:$VERSION
-  - docker push $REPO_WEB
+ # - docker build -f  Dockerfile-hasher -t $REPO_HASH:$COMMIT --build-arg BUILD_DATE=$BUILDDATE --build-arg VCS_REF=$COMMIT --build-arg VERSION=$VERSION .
+ # - docker tag $REPO_HASH:$COMMIT $REPO_HASH:$TAG
+ # - docker tag $REPO_HASH:$COMMIT $REPO_HASH:travis-$TRAVIS_BUILD_NUMBER
+ # - docker tag $REPO_HASH:$COMMIT $REPO_HASH:$VERSION
+ # - docker push $REPO_HASH
+ # - docker build -f  Dockerfile-worker -t $REPO_WORK:$COMMIT --build-arg BUILD_DATE=$BUILDDATE --build-arg VCS_REF=$COMMIT --build-arg VERSION=$VERSION .
+ # - docker tag $REPO_WORK:$COMMIT $REPO_WORK:$TAG
+ # - docker tag $REPO_WORK:$COMMIT $REPO_WORK:travis-$TRAVIS_BUILD_NUMBER
+ # - docker tag $REPO_WORK:$COMMIT $REPO_WORK:$VERSION
+ # - docker push $REPO_WORK
+ # - docker build -f  Dockerfile-webui -t $REPO_WEB:$COMMIT --build-arg BUILD_DATE=$BUILDDATE --build-arg VCS_REF=$COMMIT --build-arg VERSION=$VERSION .
+ # - docker tag $REPO_WEB:$COMMIT $REPO_WEB:$TAG
+ # - docker tag $REPO_WEB:$COMMIT $REPO_WEB:travis-$TRAVIS_BUILD_NUMBER
+ # - docker tag $REPO_WEB:$COMMIT $REPO_WEB:$VERSION
+ # - docker push $REPO_WEB
 
 env:
     global:
