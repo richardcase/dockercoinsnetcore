@@ -3,4 +3,10 @@
 
 ** Still a work in progress **
 
-A port of DockerCoins from https://github.com/jpetazzo/orchestration-workshop/tree/dockercon/dockercoins using .NET Core
+A port of DockerCoins from https://github.com/jpetazzo/orchestration-workshop/tree/dockercon/dockercoins using .NET Core.
+
+Outstanding changes needed:
+- Healthcheck endpoint for Rng service
+- Healthcheck endpoint for Hasher service
+- Healthcheck endpoint for Web UI
+- Reverse proxy for web ui
